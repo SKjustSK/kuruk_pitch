@@ -1,14 +1,9 @@
-
-
-
-
 "use client";
 
 import Image from "next/image";
 
 export default function Home() {
-  
-  const scrollToSection = (id:string) => {
+  const scrollToSection = (id: string) => {
     const section = document.getElementById(id);
     if (section) {
       section.scrollIntoView({ behavior: "smooth" });
@@ -19,7 +14,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-gray-900 to-white-900 text-white">
-     
       <nav className="bg-blue-500 bg-opacity-10 left-0 flex justify-between items-center px-10 py-5 fixed w-full top-0 z-50 shadow-lg">
         <h1 className="text-5xl font-bold">EagleEyes</h1>
         <div className="flex gap-6">
@@ -96,8 +90,8 @@ export default function Home() {
           />
         </div>
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
-            Manage Crowd
-          </button>
+          Manage Crowd
+        </button>
       </section>
 
       {/* Target Detection Section */}
@@ -120,8 +114,8 @@ export default function Home() {
           />
         </div>
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
-            Detect Target
-          </button>
+          Detect Target
+        </button>
       </section>
 
       {/* Crime Prevention Section */}
@@ -144,13 +138,9 @@ export default function Home() {
           />
         </div>
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
-            Prevent Crime
-          </button>
+          Prevent Crime
+        </button>
       </section>
     </div>
   );
 }
-
-
-
-
