@@ -1,24 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import UploadVideoContainer from "./UploadVideoContainer";
 import VideoContainer from "./VideoContainer";
 
-const example_timelineData = [
-  { second: 10, description: "Maximum 10 people found" },
-  { second: 20, description: "Maximum 5 people found" },
-  { second: 30, description: "Maximum 8 people found" },
-  { second: 40, description: "Maximum 12 people found" },
-  { second: 50, description: "Maximum 3 people found" },
-];
-
 export default function CrowdManagementPage() {
-  const [videoURL, setVideoURL] = useState<string | null>(null);
   const [imageKitFilePath, setImageKitFilePath] = useState<string | null>(null);
-  const [timelineData, setTimelineData] = useState([]);
+  const [timelineData, setTimelineData] = useState<
+    { second: number; description: string }[]
+  >([]);
 
-  // once you get the videoURL, do a fetch request to backend, useEfffect? idk
+  // fetch timelineData from backend using useEffect
+  // useEffect(() => {
+  //   if (!imageKitFilePath) return;
+
+  //   const fetchTimelineData = async () => {
+  //     try {
+  //       const response = await fetch(`/api/crowd-analysis?video=${imageKitFilePath}`);
+  //       const data = await response.json();
+  //       setTimelineData(data);
+  //     } catch (error) {
+  //       console.error("Error fetching timeline data:", error);
+  //     }
+  //   };
+
+  //   fetchTimelineData();
+  // }, [imageKitFilePath]);
+
+  // Convert seconds to minutes:seconds format
+  const formatTime = (seconds: number) => {
+    const min = Math.floor(seconds / 60);
+    const sec = seconds % 60;
+    return `${min}:${sec.toString().padStart(2, "0")} min`;
+  };
 
   return (
     <div className="container mx-auto py-8 px-4 space-y-8">
@@ -51,19 +66,25 @@ export default function CrowdManagementPage() {
               Crowd Analysis Timeline
             </h2>
             <div className="space-y-3 overflow-y-auto pr-2 flex-1 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
-              {timelineData.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex items-center p-3 rounded-md bg-gray-100 dark:bg-gray-800"
-                >
-                  <div className="w-24 font-medium text-gray-800 dark:text-gray-200">
-                    {item.second} min
+              {timelineData.length > 0 ? (
+                timelineData.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center p-3 rounded-md bg-gray-100 dark:bg-gray-800"
+                  >
+                    <div className="w-24 font-medium text-gray-800 dark:text-gray-200">
+                      {formatTime(item.second)}
+                    </div>
+                    <div className="text-gray-600 dark:text-gray-300">
+                      {item.description}
+                    </div>
                   </div>
-                  <div className="text-gray-600 dark:text-gray-300">
-                    {item.description}
-                  </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="text-gray-500 dark:text-gray-400">
+                  No data available
+                </p>
+              )}
             </div>
           </CardContent>
         </Card>
