@@ -11,18 +11,21 @@ import {
 } from "@vis.gl/react-google-maps";
 import { TargetLocation } from "@/types/interfaces";
 
+// <6 hrs
 const MARKER_CHANGE_TIME_1 = 6 * 60 * 60 * 1000;
+// <1 day
 const MARKER_CHANGE_TIME_2 = 24 * 60 * 60 * 1000;
+// <1 week
 const MARKER_CHANGE_TIME_3 = 7 * 24 * 60 * 60 * 1000;
 
 const getMarkerSize = (timestamp: Date) => {
   const now = Date.now();
   const diff = now - timestamp;
 
-  if (diff <= MARKER_CHANGE_TIME_1) return 36; // Large → <6 hrs
-  if (diff <= MARKER_CHANGE_TIME_2) return 30; // Medium Large → <1 day
-  if (diff <= MARKER_CHANGE_TIME_3) return 24; // Medium → <1 week
-  return 20; // Small → Older
+  if (diff <= MARKER_CHANGE_TIME_1) return 36;
+  if (diff <= MARKER_CHANGE_TIME_2) return 30;
+  if (diff <= MARKER_CHANGE_TIME_3) return 24;
+  return 20;
 };
 
 const getMarkerColor = (timestamp: Date) => {
@@ -49,7 +52,8 @@ const TargetMarkers = React.memo(
         {target_found_at.map((geolocation) => {
           const { background, border } = getMarkerColor(geolocation.timestamp);
           const size = getMarkerSize(geolocation.timestamp);
-          const circleRadius = 500; // Radius in meters (adjust as needed)
+          // Radius in meters
+          const circleRadius = 500;
 
           return (
             <AdvancedMarker
