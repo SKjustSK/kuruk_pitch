@@ -14,7 +14,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-gray-900 to-white-900 text-white">
-     
+      {/* Navbar */}
       <nav className="bg-gray-500 bg-opacity-10 left-0 flex justify-between items-center px-10 py-5 fixed w-full top-0 z-50 shadow-lg">
         <h1 className="text-3xl font-bold">EagleEyes</h1>
         <div className="flex gap-6">
@@ -59,8 +59,12 @@ export default function Home() {
         <div className="text-left text-gray-900">
           <h2 className="text-4xl font-bold mb-4">Advanced CCTV Monitoring</h2>
           <p className="text-lg mb-6">
-            Real-time surveillance with AI-based anomaly detection  <br></br>
-            and high-definition monitoring for <b>crowd management, <br /> crime prevention, </b> and <b>work monitoring</b> 
+            Real-time surveillance with AI-based anomaly detection <br />
+            and high-definition monitoring for{" "}
+            <b>
+              crowd management, <br /> crime prevention,
+            </b>{" "}
+            and <b>work monitoring</b>
           </p>
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
             Learn More
@@ -78,30 +82,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Crowd Management section  */}
+      {/* Crowd Management Section */}
       <section
         id="crowd"
         className="flex items-center justify-center h-screen px-10 bg-gray-100"
       >
         <Image
-            src="/crowd3.jpg"
-            alt="Crowd Management"
-            width={500}
-            height={400}
-            className="rounded-lg shadow-lg ml-30"
-          />
+          src="/crowd3.jpg"
+          alt="Crowd Management"
+          width={500}
+          height={400}
+          className="rounded-lg shadow-lg ml-10"
+        />
         <div className="text-left text-gray-900 ml-20">
           <h2 className="text-4xl font-bold mb-4">Crowd Management</h2>
           <p className="text-lg mb-6">
-            AI-powered analytics to monitor the crowd at important places <br /> and to prevent any condition of stampede.
+            AI-powered analytics to monitor the crowd at important places <br />
+            and to prevent any condition of stampede.
           </p>
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg mr-50 mt-5">
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg mt-5">
             Manage Crowd
           </button>
         </div>
-        
-        
-          
       </section>
 
       {/* Target Detection Section */}
@@ -109,7 +111,7 @@ export default function Home() {
         id="target"
         className="flex items-center justify-center h-screen px-10 bg-gray-100"
       >
-        <div className="text-left text-gray-900 ml-50 mr-10">
+        <div className="text-left text-gray-900 ml-10 mr-10">
           <h2 className="text-4xl font-bold mb-4">Target Detection</h2>
           <p className="text-lg mb-6">
             Advanced person recognition and tracking to identify potential <br />
@@ -119,18 +121,14 @@ export default function Home() {
             Detect Target
           </button>
         </div>
-        
-          <Image
-            src="/rArea.png"
-            alt="Target Detection"
-            width={500}
-            height={400}
-            className="rounded-lg shadow-lg mr-30"
-          />
-        </div>
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
-            Detect Target
-          </button>
+
+        <Image
+          src="/rArea.png"
+          alt="Target Detection"
+          width={500}
+          height={400}
+          className="rounded-lg shadow-lg"
+        />
       </section>
 
       {/* Crime Prevention Section */}
@@ -139,23 +137,23 @@ export default function Home() {
         className="flex items-center justify-center h-screen px-10 bg-gray-100"
       >
         <Image
-            src="/crime.jpeg"
-            alt="Crime Prevention"
-            width={500}
-            height={400}
-            className="rounded-lg shadow-lg"
-          />
+          src="/crime.jpeg"
+          alt="Crime Prevention"
+          width={500}
+          height={400}
+          className="rounded-lg shadow-lg"
+        />
         <div className="text-left text-gray-900 ml-20">
           <h2 className="text-4xl font-bold mb-4">Crime Prevention</h2>
           <p className="text-lg mb-6">
-            Real-time checking of the crimes and send alerts to the <br /> concerned authorities regarding it.
-            Also locate <br /> the position of it in the map.
+            Real-time checking of the crimes and sending alerts to the <br />
+            concerned authorities regarding it. Also locate <br />
+            the position of it on the map.
           </p>
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
             Prevent Crime
           </button>
         </div>
-       
       </section>
     </div>
   );
