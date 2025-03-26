@@ -77,7 +77,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Crowd Management  */}
+      {/* Crowd Management section  */}
       <section
         id="crowd"
         className="flex items-center justify-center h-screen px-10 bg-blue-100"
