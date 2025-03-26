@@ -6,7 +6,6 @@ import VideoSidebar from "./VideoSidebar";
 import VideoUploadForm from "./VideoUploadForm";
 
 export default function VideoManagementPage() {
-  // Sample data for videos
   const [videos] = useState([
     { id: "vid001", name: "Entrance Camera - Main Building" },
     { id: "vid002", name: "Parking Lot - North Side" },

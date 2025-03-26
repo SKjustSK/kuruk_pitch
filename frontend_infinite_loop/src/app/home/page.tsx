@@ -3,8 +3,7 @@
 import Image from "next/image";
 
 export default function Home() {
-  
-  const scrollToSection = (id:string) => {
+  const scrollToSection = (id: string) => {
     const section = document.getElementById(id);
     if (section) {
       section.scrollIntoView({ behavior: "smooth" });
@@ -128,6 +127,10 @@ export default function Home() {
             height={400}
             className="rounded-lg shadow-lg mr-30"
           />
+        </div>
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
+            Detect Target
+          </button>
       </section>
 
       {/* Crime Prevention Section */}
@@ -157,7 +160,3 @@ export default function Home() {
     </div>
   );
 }
-
-
-
-
