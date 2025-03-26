@@ -24,7 +24,7 @@ export default function UploadDescriptionContainer({
   return (
     <div className="w-full max-w-sm p-4 bg-white shadow-lg rounded-lg flex flex-col gap-3">
       <div className="pb-3 border-b rounded-t-lg">
-        <h2 className="text-2xl font-semibold">Upload Target's Image</h2>
+        <h2 className="text-2xl font-semibold">Upload Target's Description</h2>
       </div>
 
       <Textarea
