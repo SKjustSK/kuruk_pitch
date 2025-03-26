@@ -39,15 +39,17 @@ export default function CrowdManagementPage() {
       <div className="flex flex-wrap gap-6">
         <div className="flex flex-col gap-6 flex-1 min-w-[300px]">
           <Card className="shadow-lg rounded-xl">
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold mb-3">Live Video Feed</h2>
+            <CardContent className="px-6">
+              <h2 className="text-xl font-semibold mb-4 border-b-2 pb-2">
+                Live Video Feed
+              </h2>
               <VideoContainer imageKitFilePath={imageKitFilePath} />
             </CardContent>
           </Card>
 
           <Card className="shadow-lg rounded-xl">
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold mb-4">
+            <CardContent className="px-6">
+              <h2 className="text-xl font-semibold mb-4 border-b-2 pb-2">
                 Upload CCTV Footage
               </h2>
               <UploadVideoContainer setImageKitFilePath={setImageKitFilePath} />
@@ -56,8 +58,8 @@ export default function CrowdManagementPage() {
         </div>
 
         <Card className="shadow-lg rounded-xl w-full md:w-1/3 max-h-[80vh] overflow-hidden">
-          <CardContent className="p-6 h-full flex flex-col">
-            <h2 className="text-xl font-semibold mb-4">
+          <CardContent className="px-6 h-full flex flex-col">
+            <h2 className="text-xl font-semibold mb-4 border-b-2 pb-2">
               Crowd Analysis Timeline
             </h2>
             <div className="space-y-3 overflow-y-auto pr-2 flex-1 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
