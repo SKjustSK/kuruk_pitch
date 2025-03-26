@@ -4,14 +4,17 @@ import Link from "next/link";
 export default function App() {
   return (
     <div className="justify-center items-center h-screen w-screen flex flex-col gap-12">
-      <Link href="/target_detection/">
-        <Button>Target Detection Page</Button>
-      </Link>
       <Link href="/home/">
         <Button>Home Page</Button>
       </Link>
-      <Link href="/target_detection/demo><Button /">
+      <Link href="/target_detection/">
+        <Button>Target Detection Page</Button>
+      </Link>
+      <Link href="/target_detection/demo/">
         <Button>Demo cctv upload page</Button>
+      </Link>
+      <Link href="/crowd_management/">
+        <Button>Crowd Management page</Button>
       </Link>
     </div>
   );
