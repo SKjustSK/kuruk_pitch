@@ -43,13 +43,10 @@ export default function UploadTargetImageContainer({
     formData.append("description", targetDescription);
 
     try {
-      const response = await fetch(
-        "https://054e-35-229-99-177.ngrok-free.app/predict/",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch(process.env.NEXT_PUBLIC_COLLAB_PUBLIC_URL, {
+        method: "POST",
+        body: formData,
+      });
 
       if (!response.ok) {
         throw new Error("Failed to upload image");
