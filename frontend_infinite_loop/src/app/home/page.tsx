@@ -20,30 +20,30 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-r from-gray-900 to-white-900 text-white">
      
-      <nav className="flex justify-between items-center px-10 py-5 bg-gray-800 fixed w-full top-0 z-50 shadow-lg">
+      <nav className="bg-blue-500 bg-opacity-10 left-0 flex justify-between items-center px-10 py-5 fixed w-full top-0 z-50 shadow-lg">
         <h1 className="text-5xl font-bold">EagleEyes</h1>
         <div className="flex gap-6">
           <button
             onClick={() => scrollToSection("home")}
-            className="hover:text-blue-500 text-2xl mr-10 ml-0"
+            className="hover:text-black text-2xl mr-10 ml-0"
           >
             Home
           </button>
           <button
             onClick={() => scrollToSection("crowd")}
-            className="hover:text-blue-500 text-2xl mr-10"
+            className="hover:text-black text-2xl mr-10"
           >
             Crowd Management
           </button>
           <button
             onClick={() => scrollToSection("target")}
-            className="hover:text-blue-500 text-2xl mr-10"
+            className="hover:text-black text-2xl mr-10"
           >
             Target Detection
           </button>
           <button
             onClick={() => scrollToSection("crime")}
-            className="hover:text-blue-500 text-2xl mr-10"
+            className="hover:text-black text-2xl mr-10"
           >
             Crime Prevention
           </button>
@@ -58,7 +58,7 @@ export default function Home() {
         <div className="text-left text-gray-900">
           <h2 className="text-4xl font-bold mb-4">Advanced CCTV Monitoring</h2>
           <p className="text-lg mb-6">
-            Real-time surveillance with AI-based anomaly detection and
+            Real-time surveillance with AI-based anomaly detection and <br></br>
             high-definition monitoring for total security.
           </p>
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
@@ -85,17 +85,19 @@ export default function Home() {
         <div className="text-left text-gray-900">
           <h2 className="text-4xl font-bold mb-4">Crowd Management</h2>
           <p className="text-lg mb-6">
-            AI-powered analytics to monitor and manage large crowds efficiently,
-            ensuring safety and smooth operations.
+            AI-powered analytics to monitor and manage large crowds efficiently.
           </p>
           <Image
-            src="/crowd.jpg"
+            src="/crowd3.jpg"
             alt="Crowd Management"
             width={500}
             height={400}
             className="rounded-lg shadow-lg"
           />
         </div>
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
+            Manage Crowd
+          </button>
       </section>
 
       {/* Target Detection Section */}
@@ -110,13 +112,16 @@ export default function Home() {
             threats in real-time.
           </p>
           <Image
-            src="/target.jpg"
+            src="/rArea.png"
             alt="Target Detection"
             width={500}
             height={400}
             className="rounded-lg shadow-lg"
           />
         </div>
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
+            Detect Target
+          </button>
       </section>
 
       {/* Crime Prevention Section */}
@@ -131,13 +136,16 @@ export default function Home() {
             activities before they occur.
           </p>
           <Image
-            src="/crime.jpg"
+            src="/crime.jpeg"
             alt="Crime Prevention"
             width={500}
             height={400}
             className="rounded-lg shadow-lg"
           />
         </div>
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
+            Prevent Crime
+          </button>
       </section>
     </div>
   );
