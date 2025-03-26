@@ -1,4 +1,7 @@
 
+
+
+
 "use client";
 
 import Image from "next/image";
@@ -74,7 +77,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Crowd Management Section */}
+      {/* Crowd Management  */}
       <section
         id="crowd"
         className="flex items-center justify-center h-screen px-10 bg-blue-100"
