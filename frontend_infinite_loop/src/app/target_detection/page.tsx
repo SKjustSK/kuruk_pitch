@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import UploadTargetImageContainer from "@/components/target-upload/UploadTargetImageContainer";
 import TargetMapLocation from "@/components/map/TargetMapLocation";
 import LocationList from "@/components/target-location/LocationList";
+import UploadDescriptionContainer from "@/components/target-upload/UploadDescriptionContainer";
 
 import {
   example_target_found_at_1,
@@ -43,7 +44,9 @@ export default function App() {
         <UploadTargetImageContainer
           setTargetFoundAt={set_example_target_found_at}
         />
-
+        <UploadDescriptionContainer
+          setTargetFoundAt={set_example_target_found_at}
+        />
         <div className="px-4 py-3 border-b bg-white rounded-lg flex items-center gap-2">
           <Button className="flex-1" onClick={handleChangeTargetButton}>
             Change target

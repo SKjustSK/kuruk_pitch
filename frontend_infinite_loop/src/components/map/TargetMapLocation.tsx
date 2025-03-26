@@ -33,12 +33,12 @@ const getMarkerColor = (timestamp: Date) => {
   const diff = now - timestamp;
 
   if (diff <= MARKER_CHANGE_TIME_1)
-    return { background: "#FF3B30", border: "#B71C1C" }; // Bright Red
+    return { background: "#FF3B30", border: "#B71C1C" };
   if (diff <= MARKER_CHANGE_TIME_2)
-    return { background: "#FF9800", border: "#E65100" }; // Orange
+    return { background: "#FF9800", border: "#E65100" };
   if (diff <= MARKER_CHANGE_TIME_3)
-    return { background: "#FFD600", border: "#FFAB00" }; // Yellow
-  return { background: "#9E9E9E", border: "#616161" }; // Gray
+    return { background: "#FFD600", border: "#FFAB00" };
+  return { background: "#9E9E9E", border: "#616161" };
 };
 
 const TargetMarkers = React.memo(

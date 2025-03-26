@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { TargetLocation } from "@/types/interfaces";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { ImagePlus } from "lucide-react";
 import { example_target_found_at_1 } from "@/app/target_detection/example_target_found_at";
 interface UploadTargetImageContainerProps {
@@ -15,7 +14,6 @@ export default function UploadTargetImageContainer({
   setTargetFoundAt,
 }: UploadTargetImageContainerProps) {
   const [targetImage, setTargetImage] = useState<string | null>(null);
-  const [targetDescription, setTargetDescription] = useState<string>("");
 
   const handleTargetImageDisplayContainer = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -40,7 +38,6 @@ export default function UploadTargetImageContainer({
 
     const formData = new FormData();
     formData.append("image_file", file);
-    formData.append("description", targetDescription);
 
     try {
       const response = await fetch(process.env.NEXT_PUBLIC_COLLAB_PUBLIC_URL, {
@@ -57,7 +54,6 @@ export default function UploadTargetImageContainer({
 
       // Reset UI
       setTargetImage(null);
-      setTargetDescription("");
     } catch (error) {
       console.error("Error uploading image:", error);
     }
@@ -89,14 +85,6 @@ export default function UploadTargetImageContainer({
         accept="image/*"
         onChange={handleTargetImageDisplayContainer}
         className="pt-2"
-      />
-
-      <Textarea
-        id="targetDescription"
-        placeholder="Describe the target's features (e.g., color, clothing, height, etc.)"
-        value={targetDescription}
-        onChange={(e) => setTargetDescription(e.target.value)}
-        className="resize-none mt-2"
       />
 
       <Button onClick={handleTargetImageUpload} disabled={!targetImage}>
