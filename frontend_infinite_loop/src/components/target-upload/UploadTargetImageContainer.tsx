@@ -27,8 +27,44 @@ export default function UploadTargetImageContainer({
     setTargetImage(imageUrl);
   };
 
-  const handleTargetImageUpload = () => {
-    // TODO: Fetch requests for backend image processing (targetImage, targetDescription)
+  const handleTargetImageUpload = async () => {
+    console.log("Hello");
+
+    if (!targetImage) return;
+
+    const fileInput = document.getElementById(
+      "targetImage"
+    ) as HTMLInputElement;
+    if (!fileInput.files || fileInput.files.length === 0) return;
+    const file = fileInput.files[0];
+
+    const formData = new FormData();
+    formData.append("image_file", file);
+    formData.append("description", targetDescription);
+
+    try {
+      const response = await fetch(
+        "https://054e-35-229-99-177.ngrok-free.app/predict/",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to upload image");
+      }
+
+      const data = await response.json();
+      console.log("Image uploaded:", data);
+
+      // Reset UI
+      setTargetImage(null);
+      setTargetDescription("");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+
     setTargetFoundAt(example_target_found_at_1);
   };
 
@@ -58,7 +94,6 @@ export default function UploadTargetImageContainer({
         className="pt-2"
       />
 
-      {/* Target Description Input */}
       <Textarea
         id="targetDescription"
         placeholder="Describe the target's features (e.g., color, clothing, height, etc.)"
