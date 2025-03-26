@@ -5,35 +5,30 @@ import { Card, CardContent } from "@/components/ui/card";
 import UploadVideoContainer from "./UploadVideoContainer";
 import VideoContainer from "./VideoContainer";
 
+const example_timelineData = [
+  {
+    second: 10,
+    max_people_found: 20,
+  },
+  {
+    second: 20,
+    max_people_found: 6,
+  },
+];
+
 export default function CrowdManagementPage() {
   const [imageKitFilePath, setImageKitFilePath] = useState<string | null>(null);
   const [timelineData, setTimelineData] = useState<
-    { second: number; description: string }[]
+    { second: number; max_people_found: number }[]
   >([]);
 
-  // fetch timelineData from backend using useEffect
-  // useEffect(() => {
-  //   if (!imageKitFilePath) return;
-
-  //   const fetchTimelineData = async () => {
-  //     try {
-  //       const response = await fetch(`/api/crowd-analysis?video=${imageKitFilePath}`);
-  //       const data = await response.json();
-  //       setTimelineData(data);
-  //     } catch (error) {
-  //       console.error("Error fetching timeline data:", error);
-  //     }
-  //   };
-
-  //   fetchTimelineData();
-  // }, [imageKitFilePath]);
-
-  // Convert seconds to minutes:seconds format
   const formatTime = (seconds: number) => {
     const min = Math.floor(seconds / 60);
     const sec = seconds % 60;
     return `${min}:${sec.toString().padStart(2, "0")} min`;
   };
+
+  // TODO: implement fethcing of timelineData by providing the imageKitFilePath.
 
   return (
     <div className="container mx-auto py-8 px-4 space-y-8">
@@ -76,7 +71,7 @@ export default function CrowdManagementPage() {
                       {formatTime(item.second)}
                     </div>
                     <div className="text-gray-600 dark:text-gray-300">
-                      {item.description}
+                      {`Maximum ${item.max_people_found} people were found`}
                     </div>
                   </div>
                 ))
