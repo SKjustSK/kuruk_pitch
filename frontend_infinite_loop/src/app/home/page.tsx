@@ -4,7 +4,7 @@
 import Image from "next/image";
 
 export default function Home() {
-  // Smooth scroll to section by ID
+  
   const scrollToSection = (id:string) => {
     const section = document.getElementById(id);
     if (section) {
@@ -16,7 +16,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-gray-900 to-white-900 text-white">
-      {/* Navbar */}
+     
       <nav className="flex justify-between items-center px-10 py-5 bg-gray-800 fixed w-full top-0 z-50 shadow-lg">
         <h1 className="text-5xl font-bold">EagleEyes</h1>
         <div className="flex gap-6">
