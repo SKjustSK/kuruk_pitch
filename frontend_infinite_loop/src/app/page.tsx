@@ -8,13 +8,16 @@ export default function App() {
         <Button>Home Page</Button>
       </Link>
       <Link href="/target_detection/">
-        <Button>Target Detection Page</Button>
+        <Button>Target Detection Mode</Button>
       </Link>
       <Link href="/target_detection/demo/">
         <Button>Demo cctv upload page</Button>
       </Link>
+      <Link href="/restricted_mode/">
+        <Button>Restricted Mode</Button>
+      </Link>
       <Link href="/crowd_management/">
-        <Button>Crowd Management page</Button>
+        <Button>Crowd Management Mode</Button>
       </Link>
     </div>
   );

@@ -14,6 +14,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { DemoCCTVFootage } from "@/types/interfaces";
+import { ImageKitProvider, IKImage, IKUpload } from "imagekitio-next";
+
+const publicKey = process.env.NEXT_PUBLIC_PUBLIC_KEY;
+const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT;
 
 export default function VideoUploadForm() {
   const [formData, setFormData] = useState<DemoCCTVFootage>({
@@ -23,7 +27,29 @@ export default function VideoUploadForm() {
     time_uploaded_at: new Date(),
     video_url: "",
   });
-  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [imageKitFilePath, setImageKitFilePath] = useState<string | null>(null);
+  const videoURL = imageKitFilePath ? `${urlEndpoint}${imageKitFilePath}` : "";
+
+  const authenticator = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/auth");
+      if (!response.ok)
+        throw new Error(`Request failed with status ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error("Authentication failed:", error);
+      return {};
+    }
+  };
+
+  const onError = (err) => {
+    console.log("Error", err);
+  };
+
+  const onSuccess = (res) => {
+    console.log("Success", res);
+    setImageKitFilePath(res.filePath);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -44,22 +70,16 @@ export default function VideoUploadForm() {
     });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setVideoFile(e.target.files[0]);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!videoFile) return;
+    if (!videoURL) return;
 
     const formDataToSend = new FormData();
     formDataToSend.append("cctv_id", formData.cctv_id);
     formDataToSend.append("location_name", formData.location_name);
     formDataToSend.append("lat", String(formData.coordinates.lat));
     formDataToSend.append("lng", String(formData.coordinates.lng));
-    formDataToSend.append("video", videoFile);
+    formDataToSend.append("videoURL", videoURL);
 
     // try {
     //   const response = await fetch("YOUR_BACKEND_UPLOAD_URL", {
@@ -135,13 +155,17 @@ export default function VideoUploadForm() {
 
           <div className="space-y-2">
             <Label htmlFor="video">Upload Video</Label>
-            <Input
-              id="video"
-              name="video"
-              type="file"
-              accept="video/*"
-              onChange={handleFileChange}
-            />
+            <ImageKitProvider
+              publicKey={publicKey}
+              urlEndpoint={urlEndpoint}
+              authenticator={authenticator}
+            >
+              <IKUpload
+                className="bg-neutral-950 rounded-lg text-white px-4 py-2 text-sm"
+                onError={onError}
+                onSuccess={onSuccess}
+              />
+            </ImageKitProvider>
           </div>
         </CardContent>
 
