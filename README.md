@@ -22,3 +22,4 @@ Go into the /frontend_infinite_loop/ directiory, and perform
 `npm run dev`
 
 Our backend is built in Google Collab, there it won't be directly show caseble in github, however we assure you it works perfectly.
+Checkout https://github.com/JDAI-CV/fast-reid.git for details
