@@ -8,13 +8,13 @@ Before accessing the website, api keys are needed for respective servieces ->
 Create a `.env` file and put the following contents:
 
 ```
-NEXT_PUBLIC_PUBLIC_KEY="<insert>"
-NEXT_PUBLIC_URL_ENDPOINT="<insert>"
-PRIVATE_KEY=""<insert>"
+NEXT_PUBLIC_PUBLIC_KEY="public_NzSRiEU4ALXmWmhYr27mbe2lgqE="
+NEXT_PUBLIC_URL_ENDPOINT="https://ik.imagekit.io/dp5r64coi/"
+PRIVATE_KEY="private_7BBhM3oeH0sZLlIcsxALNcSb1kI="
 
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="<insert>"
-NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID="<insert>"
-NEXT_PUBLIC_COLLAB_PUBLIC_URL="https://054e-35-229-99-177.ngrok-free.app/predict/"
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="AIzaSyAT4TBVLGRAvNUq8O177-JGiWuQadk3Pb0"
+NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID="2e0ddee4c610d77b"
+NEXT_PUBLIC_COLLAB_PUBLIC_URL="https://e55b-34-125-17-227.ngrok-free.app"
 ```
 
 Go into the /frontend_infinite_loop/ directiory, and perform
