@@ -7,17 +7,34 @@ import VideoContainer from "./VideoContainer";
 
 const example_timelineData = [
   {
-    second: 10,
-    max_people_found: 20,
+    second: 2,
+    max_people_found: 4,
   },
   {
-    second: 20,
+    second: 4,
+    max_people_found: 10,
+  },
+  {
+    second: 6,
+    max_people_found: 7,
+  },
+  {
+    second: 8,
     max_people_found: 6,
+  },
+  {
+    second: 10,
+    max_people_found: 9,
   },
 ];
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_COLLAB_PUBLIC_URL;
+const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT;
+
 export default function CrowdManagementPage() {
   const [imageKitFilePath, setImageKitFilePath] = useState<string | null>(null);
+  const videoURL = imageKitFilePath ? `${urlEndpoint}${imageKitFilePath}` : "";
+
   const [timelineData, setTimelineData] = useState<
     { second: number; max_people_found: number }[]
   >([]);
@@ -28,7 +45,40 @@ export default function CrowdManagementPage() {
     return `${min}:${sec.toString().padStart(2, "0")} min`;
   };
 
-  // TODO: implement fethcing of timelineData by providing the imageKitFilePath.
+  useEffect(() => {
+    console.log("Request sent:", videoURL);
+    if (!videoURL) return;
+
+    const fetchTimelineData = async () => {
+      const requestBody = {
+        video_url: videoURL,
+        metadata: {},
+      };
+
+      try {
+        const response = await fetch(`${BACKEND_URL}/video-count-population`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Failed to fetch timeline data: ${errorText}`);
+        }
+
+        const data = await response.json();
+        console.log(data);
+        setTimelineData(data.timeline_data);
+      } catch (error) {
+        console.error("Error fetching timeline data:", error);
+      }
+    };
+
+    fetchTimelineData();
+  }, [videoURL]);
 
   return (
     <div className="container mx-auto py-8 px-4 space-y-8">

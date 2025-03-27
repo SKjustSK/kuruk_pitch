@@ -13,7 +13,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-gray-900 to-white-900 text-white">
+    <div className="min-h-screen text-white">
       {/* Navbar */}
       <nav className="bg-gray-500 bg-opacity-10 left-0 flex justify-between items-center px-10 py-5 fixed w-full top-0 z-50 shadow-lg">
         <h1 className="text-3xl font-bold">EagleEyes</h1>
@@ -51,7 +51,6 @@ export default function Home() {
         </div>
       </nav>
 
-      
       <section
         id="home"
         className="flex items-center justify-center h-screen px-10 pt-20 bg-gray-100"
@@ -82,7 +81,6 @@ export default function Home() {
         </div>
       </section>
 
-      
       <section
         id="crowd"
         className="flex items-center justify-center h-screen px-10 bg-gray-100"
@@ -106,7 +104,6 @@ export default function Home() {
         </div>
       </section>
 
-     
       <section
         id="target"
         className="flex items-center justify-center h-screen px-10 bg-gray-100"
@@ -114,7 +111,8 @@ export default function Home() {
         <div className="text-left text-gray-900 ml-10 mr-10">
           <h2 className="text-4xl font-bold mb-4">Target Detection</h2>
           <p className="text-lg mb-6">
-            Advanced person recognition and tracking to identify potential <br />
+            Advanced person recognition and tracking to identify potential{" "}
+            <br />
             criminal or missing person in large and small cities.
           </p>
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
@@ -131,7 +129,6 @@ export default function Home() {
         />
       </section>
 
-      
       <section
         id="crime"
         className="flex items-center justify-center h-screen px-10 bg-gray-100"

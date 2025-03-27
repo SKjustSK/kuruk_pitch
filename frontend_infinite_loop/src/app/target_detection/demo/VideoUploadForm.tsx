@@ -1,7 +1,6 @@
 "use client";
 
-import type React from "react";
-import { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,10 +13,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { DemoCCTVFootage } from "@/types/interfaces";
-import { ImageKitProvider, IKImage, IKUpload } from "imagekitio-next";
+import { ImageKitProvider, IKUpload } from "imagekitio-next";
 
 const publicKey = process.env.NEXT_PUBLIC_PUBLIC_KEY;
 const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT;
+const BACKEND_URL = process.env.NEXT_PUBLIC_COLLAB_PUBLIC_URL;
 
 export default function VideoUploadForm() {
   const [formData, setFormData] = useState<DemoCCTVFootage>({
@@ -27,84 +27,94 @@ export default function VideoUploadForm() {
     time_uploaded_at: new Date(),
     video_url: "",
   });
-  const [imageKitFilePath, setImageKitFilePath] = useState<string | null>(null);
-  const videoURL = imageKitFilePath ? `${urlEndpoint}${imageKitFilePath}` : "";
 
-  const authenticator = async () => {
+  const [videoPath, setVideoPath] = useState<string | null>(null);
+
+  const videoURL = videoPath ? `${urlEndpoint}${videoPath}` : "";
+
+  const authenticator = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/auth");
-      if (!response.ok)
-        throw new Error(`Request failed with status ${response.status}`);
+      const response = await fetch("/api/auth");
+      if (!response.ok) throw new Error(`Auth failed: ${response.statusText}`);
       return await response.json();
     } catch (error) {
       console.error("Authentication failed:", error);
       return {};
     }
-  };
+  }, []);
 
-  const onError = (err) => {
-    console.log("Error", err);
-  };
+  const handleUploadSuccess = useCallback((res: any) => {
+    console.log("Upload success:", res);
+    setVideoPath(res.filePath);
+  }, []);
 
-  const onSuccess = (res) => {
-    console.log("Success", res);
-    setImageKitFilePath(res.filePath);
-  };
+  const handleUploadError = useCallback((err: any) => {
+    console.error("Upload error:", err);
+  }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => {
-      if (name === "lat" || name === "lng") {
-        return {
-          ...prev,
-          coordinates: {
-            ...prev.coordinates,
-            [name]: value === "" ? "" : parseFloat(value),
-          },
-        };
-      }
-      return {
-        ...prev,
-        [name]: value,
-      };
-    });
-  };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setFormData((prev) => {
+        if (name === "lat" || name === "lng") {
+          return {
+            ...prev,
+            coordinates: {
+              ...prev.coordinates,
+              [name]: value ? parseFloat(value) : "",
+            },
+          };
+        }
+        return { ...prev, [name]: value };
+      });
+    },
+    []
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!videoURL) return;
 
-    const formDataToSend = new FormData();
-    formDataToSend.append("cctv_id", formData.cctv_id);
-    formDataToSend.append("location_name", formData.location_name);
-    formDataToSend.append("coordinates", JSON.stringify(formData.coordinates));
-    formDataToSend.append(
-      "time_uploaded_at",
-      formData.time_uploaded_at.toISOString()
-    );
-    formDataToSend.append("video_url", videoURL);
+    if (!videoURL) {
+      console.error("No video uploaded.");
+      return;
+    }
 
-    // try {
-    //   const response = await fetch("YOUR_BACKEND_UPLOAD_URL", {
-    //     method: "POST",
-    //     body: formDataToSend,
-    //   });
-    //   const data = await response.json();
-    //   console.log("Upload success:", data);
-    // } catch (error) {
-    //   console.error("Upload failed:", error);
-    // }
-    console.log(formDataToSend);
+    const requestBody = {
+      CCTV_id: Number(formData.cctv_id), // Convert to number
+      location: formData.location_name, // Match expected key
+      latlong: [formData.coordinates.lat, formData.coordinates.lng], // Match expected format
+      timestamp: new Date().toISOString(), // Ensure correct timestamp format
+      Url: videoURL, // Match expected key
+    };
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/cctv-data`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Upload failed: ${response.status} - ${errorText}`);
+      }
+
+      const data = await response.json();
+      console.log("Upload successful:", data);
+    } catch (error) {
+      console.error("Upload error:", error);
+    }
   };
 
   return (
     <Card className="w-full">
       <CardHeader>
         <CardTitle>Add New CCTV Video</CardTitle>
-        <CardDescription>
-          Enter the details for the new CCTV video footage
-        </CardDescription>
+        <CardDescription>Enter the CCTV footage details</CardDescription>
       </CardHeader>
+
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <CardContent className="space-y-4">
           <div className="space-y-2">
@@ -165,11 +175,22 @@ export default function VideoUploadForm() {
             >
               <IKUpload
                 className="bg-neutral-950 rounded-lg text-white px-4 py-2 text-sm"
-                onError={onError}
-                onSuccess={onSuccess}
+                onError={handleUploadError}
+                onSuccess={handleUploadSuccess}
               />
             </ImageKitProvider>
           </div>
+
+          {videoURL && (
+            <div className="mt-4">
+              <Label>Video Preview:</Label>
+              <video
+                src={videoURL}
+                controls
+                className="w-full rounded-lg shadow-lg"
+              />
+            </div>
+          )}
         </CardContent>
 
         <CardFooter>

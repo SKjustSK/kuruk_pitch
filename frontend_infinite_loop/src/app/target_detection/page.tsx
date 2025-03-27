@@ -39,7 +39,7 @@ export default function App() {
       <section className="absolute top-0 left-0 p-4 z-10 w-1/5 bg-tranparent flex flex-col gap-2">
         {/* Logo */}
         <div className="px-4 py-3 border-b bg-white rounded-lg flex items-center gap-2">
-          <h1 className="text-3xl font-bold text-blue-600">TargetTrack</h1>
+          <h1 className="text-3xl font-bold text-blue-600">EagleEyes</h1>
         </div>
 
         {/* Target Image Upload  */}

@@ -16,9 +16,30 @@ export default function UploadDescriptionContainer({
   const [targetDescription, setTargetDescription] = useState<string>("");
 
   const handleTargetDescriptionUpload = async () => {
-    console.log("Sending description");
+    if (!targetDescription.trim()) return;
 
-    setTargetFoundAt(example_target_found_at_2);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_COLLAB_PUBLIC_URL}/upload-description`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ description: targetDescription }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to upload: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log("Upload success:", data);
+
+      // Assuming the API returns target locations based on the description
+      setTargetFoundAt(data.targetLocations || example_target_found_at_2);
+    } catch (error) {
+      console.error("Upload failed:", error);
+    }
   };
 
   return (

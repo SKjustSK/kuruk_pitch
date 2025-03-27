@@ -1,19 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { TargetLocation } from "@/types/interfaces";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImagePlus } from "lucide-react";
 import { example_target_found_at_1 } from "@/app/target_detection/example_target_found_at";
+
 interface UploadTargetImageContainerProps {
   setTargetFoundAt: (locations: TargetLocation[]) => void;
 }
+
+const BACKEND_URL = process.env.NEXT_PUBLIC_COLLAB_PUBLIC_URL;
 
 export default function UploadTargetImageContainer({
   setTargetFoundAt,
 }: UploadTargetImageContainerProps) {
   const [targetImage, setTargetImage] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleTargetImageDisplayContainer = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -21,44 +26,64 @@ export default function UploadTargetImageContainer({
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Cleanup existing object URL before setting a new one
+    if (targetImage) {
+      URL.revokeObjectURL(targetImage);
+    }
+
     const imageUrl = URL.createObjectURL(file);
     setTargetImage(imageUrl);
+    setSelectedFile(file);
   };
 
   const handleTargetImageUpload = async () => {
-    console.log("Hello");
+    // if (!selectedFile) return;
 
-    if (!targetImage) return;
-
-    const fileInput = document.getElementById(
-      "targetImage"
-    ) as HTMLInputElement;
-    if (!fileInput.files || fileInput.files.length === 0) return;
-    const file = fileInput.files[0];
-
-    const formData = new FormData();
-    formData.append("image_file", file);
+    // const formData = new FormData();
+    // formData.append("image_file", selectedFile);
 
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_COLLAB_PUBLIC_URL, {
-        method: "POST",
-        body: formData,
-      });
+      // const response = await fetch(`${BACKEND_URL}/photo-predict`, {
+      //   method: "POST",
+      //   body: formData,
+      // });
 
-      if (!response.ok) {
-        throw new Error("Failed to upload image");
-      }
+      // if (!response.ok) {
+      //   throw new Error(`Failed to upload image: ${response.statusText}`);
+      // }
 
-      const data = await response.json();
-      console.log("Image uploaded:", data);
+      // const data = await response.json();
+      // console.log("Data fetched:", data);
 
-      // Reset UI
-      setTargetImage(null);
+      // // Reset UI and cleanup object URL
+      // setTargetImage(null);
+      // setSelectedFile(null);
+      // if (fileInputRef.current) {
+      //   fileInputRef.current.value = "";
+      // }
+
+      // const response_target_found_at: TargetLocation[] = data.metadata.map(
+      //   (entry: any) => ({
+      //     cctv_id: String(entry.camera_id),
+      //     location_name: entry.location,
+      //     coordinates: {
+      //       lat: entry.latlong[0],
+      //       lng: entry.latlong[1],
+      //     },
+      //     timestamp: new Date(entry.timestamp),
+      //     ...(entry.confidence !== undefined && {
+      //       confidence: entry.confidence,
+      //     }),
+      //   })
+      // );
+
+      // setTargetFoundAt(response_target_found_at || example_target_found_at_1);
+
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      setTargetFoundAt(example_target_found_at_1);
     } catch (error) {
       console.error("Error uploading image:", error);
     }
-
-    setTargetFoundAt(example_target_found_at_1);
   };
 
   return (
@@ -80,6 +105,7 @@ export default function UploadTargetImageContainer({
       </div>
 
       <Input
+        ref={fileInputRef}
         id="targetImage"
         type="file"
         accept="image/*"
@@ -87,7 +113,7 @@ export default function UploadTargetImageContainer({
         className="pt-2"
       />
 
-      <Button onClick={handleTargetImageUpload} disabled={!targetImage}>
+      <Button onClick={handleTargetImageUpload} disabled={!selectedFile}>
         Upload Target
       </Button>
     </div>

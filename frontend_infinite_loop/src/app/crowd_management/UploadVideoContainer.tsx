@@ -1,6 +1,7 @@
 "use client";
+
 import React from "react";
-import { ImageKitProvider, IKImage, IKUpload } from "imagekitio-next";
+import { ImageKitProvider, IKUpload } from "imagekitio-next";
 import { Button } from "@/components/ui/button";
 
 const publicKey = process.env.NEXT_PUBLIC_PUBLIC_KEY;
@@ -9,7 +10,7 @@ const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT;
 export default function UploadVideoContainer({ setImageKitFilePath }) {
   const authenticator = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/auth");
+      const response = await fetch("/api/auth");
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -18,23 +19,20 @@ export default function UploadVideoContainer({ setImageKitFilePath }) {
         );
       }
 
-      const data = await response.json();
-      setImageKitFilePath(response.url);
-      const { signature, expire, token } = data;
+      const { signature, expire, token } = await response.json();
       return { signature, expire, token };
     } catch (error) {
-      throw new Error(`Authentication request failed: ${error.message}`);
+      console.error("Authentication request failed:", error);
+      throw error;
     }
   };
 
   const onError = (err) => {
-    console.log("Error", err);
+    console.error("Upload Error:", err);
   };
 
   const onSuccess = (res) => {
-    console.log("Success", res);
-    console.log(res.url);
-    console.log(res.filePath);
+    console.log("Upload Success:", res);
     setImageKitFilePath(res.filePath);
   };
 
@@ -44,9 +42,17 @@ export default function UploadVideoContainer({ setImageKitFilePath }) {
       urlEndpoint={urlEndpoint}
       authenticator={authenticator}
     >
-      <Button>
-        <IKUpload onError={onError} onSuccess={onSuccess} />
-      </Button>
+      <IKUpload
+        onError={onError}
+        onSuccess={onSuccess}
+        className="hidden"
+        id="file-upload"
+      />
+      <label htmlFor="file-upload">
+        <Button asChild>
+          <span>Upload Video</span>
+        </Button>
+      </label>
     </ImageKitProvider>
   );
 }
