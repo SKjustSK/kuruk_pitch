@@ -5,7 +5,7 @@ Before accessing the website, api keys are needed for respective servieces ->
 1. Google Maps API
 2. ImageKit
 
-Create a `.env` file and put the following contents:
+Create a `.env` file in /frontend_infinite_loop/ directory and put the following contents:
 
 ```
 NEXT_PUBLIC_PUBLIC_KEY="public_NzSRiEU4ALXmWmhYr27mbe2lgqE="
