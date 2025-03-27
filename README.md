@@ -1,4 +1,6 @@
-# How to use (in progress, mid hackathon)
+# How to use
+
+## Frontend Details
 
 Before accessing the website, api keys are needed for respective servieces ->
 
@@ -21,5 +23,7 @@ Go into the /frontend_infinite_loop/ directiory, and perform
 `npm install`
 `npm run dev`
 
-Our backend is built in Google Collab, there it won't be directly show caseble in github, however we assure you it works perfectly.
-Checkout https://github.com/JDAI-CV/fast-reid.git for details
+### Backend Details
+
+Our backend is built in Google Collab, therefore it won't be directly showcaseable in github, however we assure you it works perfectly.
+Code snippets provided in /backend_py/
