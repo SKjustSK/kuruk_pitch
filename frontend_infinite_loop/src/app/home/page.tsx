@@ -51,7 +51,7 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Home Section */}
+      
       <section
         id="home"
         className="flex items-center justify-center h-screen px-10 pt-20 bg-gray-100"
@@ -82,7 +82,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Crowd Management Section */}
+      
       <section
         id="crowd"
         className="flex items-center justify-center h-screen px-10 bg-gray-100"
@@ -106,7 +106,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Target Detection Section */}
+     
       <section
         id="target"
         className="flex items-center justify-center h-screen px-10 bg-gray-100"
@@ -131,7 +131,7 @@ export default function Home() {
         />
       </section>
 
-      {/* Crime Prevention Section */}
+      
       <section
         id="crime"
         className="flex items-center justify-center h-screen px-10 bg-gray-100"
