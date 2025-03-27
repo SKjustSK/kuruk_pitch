@@ -8,6 +8,8 @@ import TargetMapLocation from "@/components/map/TargetMapLocation";
 import LocationList from "@/components/target-location/LocationList";
 import UploadDescriptionContainer from "@/components/target-upload/UploadDescriptionContainer";
 
+import StatusLegends from "./StatusLegends";
+
 import {
   example_target_found_at_1,
   example_target_found_at_2,
@@ -52,6 +54,8 @@ export default function App() {
             Change target
           </Button>
         </div>
+
+        <StatusLegends />
       </section>
       <TargetMapLocation target_found_at={example_target_found_at} />
       <LocationList target_found_at={example_target_found_at} />
