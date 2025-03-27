@@ -77,9 +77,12 @@ export default function VideoUploadForm() {
     const formDataToSend = new FormData();
     formDataToSend.append("cctv_id", formData.cctv_id);
     formDataToSend.append("location_name", formData.location_name);
-    formDataToSend.append("lat", String(formData.coordinates.lat));
-    formDataToSend.append("lng", String(formData.coordinates.lng));
-    formDataToSend.append("videoURL", videoURL);
+    formDataToSend.append("coordinates", JSON.stringify(formData.coordinates));
+    formDataToSend.append(
+      "time_uploaded_at",
+      formData.time_uploaded_at.toISOString()
+    );
+    formDataToSend.append("video_url", videoURL);
 
     // try {
     //   const response = await fetch("YOUR_BACKEND_UPLOAD_URL", {
