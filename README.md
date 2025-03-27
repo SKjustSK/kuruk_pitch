@@ -19,6 +19,9 @@ NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID="2e0ddee4c610d77b"
 NEXT_PUBLIC_COLLAB_PUBLIC_URL="https://e55b-34-125-17-227.ngrok-free.app"
 ```
 
+Note that the COLLAB_PUBLIC_URL might change due to lack of gpu and session timeouts, therefore backend requests will get CORS errors.
+The Restricted Area Mode route is working though.
+
 Go into the /frontend_infinite_loop/ directiory, and perform
 `npm install`
 `npm run dev`
