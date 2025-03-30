@@ -9,7 +9,7 @@ export default function LocationList({
   target_found_at: TargetLocation[];
 }) {
   const sortedLocations = [...target_found_at].sort(
-    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
   );
 
   return (

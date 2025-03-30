@@ -4,7 +4,7 @@ import React, { useState, useRef } from "react";
 import { TargetLocation } from "@/types/interfaces";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ImagePlus } from "lucide-react";
+import { ImagePlus, Loader2 } from "lucide-react";
 
 interface UploadTargetImageContainerProps {
   setTargetFoundAt: (locations: TargetLocation[]) => void;
@@ -17,6 +17,7 @@ export default function UploadTargetImageContainer({
 }: UploadTargetImageContainerProps) {
   const [targetImage, setTargetImage] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleTargetImageDisplayContainer = (
@@ -37,6 +38,8 @@ export default function UploadTargetImageContainer({
   const handleTargetImageUpload = async () => {
     if (!selectedFile) return;
 
+    setLoading(true);
+
     const formData = new FormData();
     formData.append("image_file", selectedFile);
 
@@ -51,6 +54,7 @@ export default function UploadTargetImageContainer({
       }
 
       const data = await response.json();
+      console.group("Data fetched: ", data);
 
       const uniqueEntries = new Map<string, TargetLocation>();
 
@@ -84,6 +88,8 @@ export default function UploadTargetImageContainer({
       }
     } catch (error) {
       console.error("Error uploading image:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -112,10 +118,18 @@ export default function UploadTargetImageContainer({
         accept="image/*"
         onChange={handleTargetImageDisplayContainer}
         className="pt-2"
+        disabled={loading}
       />
 
-      <Button onClick={handleTargetImageUpload} disabled={!selectedFile}>
-        Upload Target
+      <Button
+        onClick={handleTargetImageUpload}
+        disabled={!selectedFile || loading}
+      >
+        {loading ? (
+          <Loader2 className="w-5 h-5 animate-spin" />
+        ) : (
+          "Upload Target"
+        )}
       </Button>
     </div>
   );

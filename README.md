@@ -16,7 +16,7 @@ NEXT_PUBLIC_URL_ENDPOINT="https://ik.imagekit.io/23tlumpya/"
 
 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="AIzaSyAT4TBVLGRAvNUq8O177-JGiWuQadk3Pb0"
 NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID="2e0ddee4c610d77b"
-NEXT_PUBLIC_COLLAB_PUBLIC_URL="https://019c-34-125-18-187.ngrok-free.app"
+NEXT_PUBLIC_COLLAB_PUBLIC_URL="https://ec28-34-168-156-181.ngrok-free.app"
 ```
 
 Note that the COLLAB_PUBLIC_URL might change due to lack of gpu and session timeouts, therefore backend requests will get CORS errors.

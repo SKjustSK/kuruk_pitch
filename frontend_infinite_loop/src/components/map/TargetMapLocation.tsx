@@ -41,7 +41,7 @@ const TargetMarkers = React.memo(({ target_found_at }) => {
   const [selectedMarker, setSelectedMarker] = useState(null);
 
   const sortedLocations = [...target_found_at].sort(
-    (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+    (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
   );
 
   return (
@@ -119,7 +119,7 @@ const FitMapToBounds = React.memo(({ target_found_at }) => {
     const bounds = new window.google.maps.LatLngBounds();
     target_found_at.forEach(({ coordinates }) => bounds.extend(coordinates));
 
-    map.fitBounds(bounds, 400);
+    map.fitBounds(bounds, 300);
   }, [map, target_found_at]);
 
   return null;
