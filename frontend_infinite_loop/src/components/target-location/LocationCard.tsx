@@ -26,14 +26,33 @@ export default function LocationCard({
     return () => clearTimeout(timer);
   }, [confidence]);
 
-  const formattedTime = new Intl.DateTimeFormat("en-GB", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  }).format(timestamp);
+  const formatTime = (timestamp: number) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+
+    const isToday = now.toDateString() === date.toDateString();
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const isYesterday = yesterday.toDateString() === date.toDateString();
+
+    const lastWeek = new Date();
+    lastWeek.setDate(lastWeek.getDate() - 7);
+    const isLastWeek = date > lastWeek && !isToday && !isYesterday;
+
+    const timeString = date.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+
+    if (isToday) return `Today, ${timeString}`;
+    if (isYesterday) return `Yesterday, ${timeString}`;
+    if (isLastWeek)
+      return `Last week (${date.toLocaleDateString("en-GB")}), ${timeString}`;
+
+    return `${date.toLocaleDateString("en-GB")} ${timeString}`;
+  };
 
   const getConfidenceColor = () => {
     if (confidence >= 0.8) return "text-green-500";
@@ -63,7 +82,7 @@ export default function LocationCard({
 
           <div className="flex items-center gap-1.5">
             <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-            <div className="text-muted-foreground">{formattedTime}</div>
+            <div className="text-muted-foreground">{formatTime(timestamp)}</div>
           </div>
         </div>
 
@@ -81,7 +100,7 @@ export default function LocationCard({
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted-foreground">Confidence</span>
             <span className={`font-bold ${getConfidenceColor()}`}>
-              {confidence * 100}%
+              {Math.round(confidence * 10000) / 100}%
             </span>
           </div>
           <Progress value={progress} className="h-1.5" />

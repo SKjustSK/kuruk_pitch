@@ -20,6 +20,8 @@ const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT;
 const BACKEND_URL = process.env.NEXT_PUBLIC_COLLAB_PUBLIC_URL;
 
 export default function VideoUploadForm() {
+  console.log("Backend url: ", BACKEND_URL);
+
   const [formData, setFormData] = useState<DemoCCTVFootage>({
     cctv_id: "",
     location_name: "",
@@ -27,10 +29,7 @@ export default function VideoUploadForm() {
     time_uploaded_at: new Date(),
     video_url: "",
   });
-
-  const [videoPath, setVideoPath] = useState<string | null>(null);
-
-  const videoURL = videoPath ? `${urlEndpoint}${videoPath}` : "";
+  const [loading, setLoading] = useState(false);
 
   const authenticator = useCallback(async () => {
     try {
@@ -45,7 +44,7 @@ export default function VideoUploadForm() {
 
   const handleUploadSuccess = useCallback((res: any) => {
     console.log("Upload success:", res);
-    setVideoPath(res.filePath);
+    setFormData((prev) => ({ ...prev, video_url: res.url }));
   }, []);
 
   const handleUploadError = useCallback((err: any) => {
@@ -73,18 +72,21 @@ export default function VideoUploadForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!videoURL) {
+    if (!formData.video_url) {
       console.error("No video uploaded.");
       return;
     }
 
+    setLoading(true);
+    console.log("Sending request to backend:", formData);
+    console.log("Backend url: ", BACKEND_URL);
+
     const requestBody = {
-      CCTV_id: Number(formData.cctv_id), // Convert to number
-      location: formData.location_name, // Match expected key
-      latlong: [formData.coordinates.lat, formData.coordinates.lng], // Match expected format
-      timestamp: new Date().toISOString(), // Ensure correct timestamp format
-      Url: videoURL, // Match expected key
+      CCTV_id: String(formData.cctv_id),
+      location: formData.location_name,
+      latlong: [formData.coordinates.lat, formData.coordinates.lng],
+      timestamp: new Date().toISOString(),
+      Url: formData.video_url,
     };
 
     try {
@@ -96,15 +98,21 @@ export default function VideoUploadForm() {
         body: JSON.stringify(requestBody),
       });
 
+      console.log("Request sent, waiting for response...");
+
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Upload failed: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
-      console.log("Upload successful:", data);
+      console.log("Response received from backend:", data);
+
+      window.location.reload();
     } catch (error) {
       console.error("Upload error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -181,11 +189,11 @@ export default function VideoUploadForm() {
             </ImageKitProvider>
           </div>
 
-          {videoURL && (
+          {formData.video_url && (
             <div className="mt-4">
               <Label>Video Preview:</Label>
               <video
-                src={videoURL}
+                src={formData.video_url}
                 controls
                 className="w-full rounded-lg shadow-lg"
               />
@@ -194,7 +202,9 @@ export default function VideoUploadForm() {
         </CardContent>
 
         <CardFooter>
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={loading}>
+            {loading ? "Submitting..." : "Submit"}
+          </Button>
         </CardFooter>
       </form>
     </Card>

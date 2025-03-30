@@ -10,13 +10,13 @@ Before accessing the website, api keys are needed for respective servieces ->
 Create a `.env` file in /frontend_infinite_loop/ directory and put the following contents:
 
 ```
-NEXT_PUBLIC_PUBLIC_KEY="public_NzSRiEU4ALXmWmhYr27mbe2lgqE="
-NEXT_PUBLIC_URL_ENDPOINT="https://ik.imagekit.io/dp5r64coi/"
-PRIVATE_KEY="private_7BBhM3oeH0sZLlIcsxALNcSb1kI="
+NEXT_PUBLIC_PUBLIC_KEY="public_42SEq0Ku78uSEoXjH4JZi9sEsyk="
+PRIVATE_KEY="private_+I4jBebszliDOQ11wn1SbTyEEqM="
+NEXT_PUBLIC_URL_ENDPOINT="https://ik.imagekit.io/23tlumpya/"
 
 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="AIzaSyAT4TBVLGRAvNUq8O177-JGiWuQadk3Pb0"
 NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID="2e0ddee4c610d77b"
-NEXT_PUBLIC_COLLAB_PUBLIC_URL="https://e55b-34-125-17-227.ngrok-free.app"
+NEXT_PUBLIC_COLLAB_PUBLIC_URL="https://019c-34-125-18-187.ngrok-free.app"
 ```
 
 Note that the COLLAB_PUBLIC_URL might change due to lack of gpu and session timeouts, therefore backend requests will get CORS errors.

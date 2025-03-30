@@ -1,13 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { ImageKitProvider, IKUpload } from "imagekitio-next";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 const publicKey = process.env.NEXT_PUBLIC_PUBLIC_KEY;
 const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT;
 
-export default function UploadVideoContainer({ setImageKitFilePath }) {
+export default function UploadVideoContainer({ setVideoURL }) {
+  const [loading, setLoading] = useState(false);
+
   const authenticator = async () => {
     try {
       const response = await fetch("/api/auth");
@@ -29,11 +32,13 @@ export default function UploadVideoContainer({ setImageKitFilePath }) {
 
   const onError = (err) => {
     console.error("Upload Error:", err);
+    setLoading(false);
   };
 
   const onSuccess = (res) => {
     console.log("Upload Success:", res);
-    setImageKitFilePath(res.filePath);
+    setVideoURL(`${urlEndpoint}${res.filePath}`);
+    setLoading(false);
   };
 
   return (
@@ -47,10 +52,14 @@ export default function UploadVideoContainer({ setImageKitFilePath }) {
         onSuccess={onSuccess}
         className="hidden"
         id="file-upload"
+        onUploadStart={() => setLoading(true)}
       />
       <label htmlFor="file-upload">
-        <Button asChild>
-          <span>Upload Video</span>
+        <Button asChild disabled={loading}>
+          <span className="flex items-center gap-2">
+            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
+            {loading ? "Uploading..." : "Upload Video"}
+          </span>
         </Button>
       </label>
     </ImageKitProvider>

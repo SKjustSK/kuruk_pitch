@@ -8,6 +8,10 @@ export default function LocationList({
 }: {
   target_found_at: TargetLocation[];
 }) {
+  const sortedLocations = [...target_found_at].sort(
+    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+  );
+
   return (
     <section className="w-full h-full max-w-sm p-4 absolute top-0 right-0 z-10 flex flex-col gap-2 bg-transparent rounded-lg">
       <div className="px-4 py-3 border-b bg-white rounded-lg">
@@ -15,9 +19,9 @@ export default function LocationList({
       </div>
 
       <div className="overflow-y-auto max-h-screen flex flex-col gap-2">
-        {target_found_at.map((detection) => (
+        {sortedLocations.map((detection) => (
           <LocationCard
-            key={detection.cctv_id}
+            key={detection.cctv_id + detection.timestamp}
             location_name={detection.location_name}
             cctv_id={detection.cctv_id}
             coordinates={detection.coordinates}

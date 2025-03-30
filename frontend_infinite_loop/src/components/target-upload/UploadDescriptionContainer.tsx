@@ -5,7 +5,7 @@ import { TargetLocation } from "@/types/interfaces";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { example_target_found_at_2 } from "@/app/target_detection/example_target_found_at";
+import { example_target_found_at_ashmit } from "@/app/target_detection/example_target_found_at";
 interface UploadDescriptionContainerProps {
   setTargetFoundAt: (locations: TargetLocation[]) => void;
 }
@@ -35,8 +35,18 @@ export default function UploadDescriptionContainer({
       const data = await response.json();
       console.log("Upload success:", data);
 
-      // Assuming the API returns target locations based on the description
-      setTargetFoundAt(data.targetLocations || example_target_found_at_2);
+      const uniqueTargetLocations = [];
+      const seen = new Set();
+
+      for (const location of data.targetLocations) {
+        const key = `${location.cctv_id}-${location.timestamp}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          uniqueTargetLocations.push(location);
+        }
+      }
+
+      setTargetFoundAt(uniqueTargetLocations);
     } catch (error) {
       console.error("Upload failed:", error);
     }

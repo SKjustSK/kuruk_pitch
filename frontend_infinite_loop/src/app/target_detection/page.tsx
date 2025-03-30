@@ -11,8 +11,9 @@ import UploadDescriptionContainer from "@/components/target-upload/UploadDescrip
 import StatusLegends from "./StatusLegends";
 
 import {
-  example_target_found_at_1,
-  example_target_found_at_2,
+  example_target_found_at_gourang,
+  example_target_found_at_ashmit,
+  example_target_found_at_ayush,
 } from "./example_target_found_at";
 
 export default function App() {
@@ -21,17 +22,15 @@ export default function App() {
   >([]);
 
   // Temporary function to change target locations to check animations
+  let [example_target_index, set_example_target_index] = useState(0);
+  const example_array = [
+    example_target_found_at_gourang,
+    example_target_found_at_ashmit,
+    example_target_found_at_ayush,
+  ];
   const handleChangeTargetButton = () => {
-    if (example_target_found_at.length === 0) {
-      set_example_target_found_at(example_target_found_at_1);
-    } else if (
-      example_target_found_at[0].cctv_id ===
-      example_target_found_at_1[0].cctv_id
-    ) {
-      set_example_target_found_at(example_target_found_at_2);
-    } else {
-      set_example_target_found_at(example_target_found_at_1);
-    }
+    set_example_target_index((example_target_index + 1) % example_array.length);
+    set_example_target_found_at(example_array[example_target_index]);
   };
 
   return (

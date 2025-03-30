@@ -5,7 +5,6 @@ import { TargetLocation } from "@/types/interfaces";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImagePlus } from "lucide-react";
-import { example_target_found_at_1 } from "@/app/target_detection/example_target_found_at";
 
 interface UploadTargetImageContainerProps {
   setTargetFoundAt: (locations: TargetLocation[]) => void;
@@ -26,7 +25,6 @@ export default function UploadTargetImageContainer({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Cleanup existing object URL before setting a new one
     if (targetImage) {
       URL.revokeObjectURL(targetImage);
     }
@@ -37,50 +35,53 @@ export default function UploadTargetImageContainer({
   };
 
   const handleTargetImageUpload = async () => {
-    // if (!selectedFile) return;
+    if (!selectedFile) return;
 
-    // const formData = new FormData();
-    // formData.append("image_file", selectedFile);
+    const formData = new FormData();
+    formData.append("image_file", selectedFile);
 
     try {
-      // const response = await fetch(`${BACKEND_URL}/photo-predict`, {
-      //   method: "POST",
-      //   body: formData,
-      // });
+      const response = await fetch(`${BACKEND_URL}/photo-predict`, {
+        method: "POST",
+        body: formData,
+      });
 
-      // if (!response.ok) {
-      //   throw new Error(`Failed to upload image: ${response.statusText}`);
-      // }
+      if (!response.ok) {
+        throw new Error(`Failed to upload image: ${response.statusText}`);
+      }
 
-      // const data = await response.json();
-      // console.log("Data fetched:", data);
+      const data = await response.json();
 
-      // // Reset UI and cleanup object URL
-      // setTargetImage(null);
-      // setSelectedFile(null);
-      // if (fileInputRef.current) {
-      //   fileInputRef.current.value = "";
-      // }
+      const uniqueEntries = new Map<string, TargetLocation>();
 
-      // const response_target_found_at: TargetLocation[] = data.metadata.map(
-      //   (entry: any) => ({
-      //     cctv_id: String(entry.camera_id),
-      //     location_name: entry.location,
-      //     coordinates: {
-      //       lat: entry.latlong[0],
-      //       lng: entry.latlong[1],
-      //     },
-      //     timestamp: new Date(entry.timestamp),
-      //     ...(entry.confidence !== undefined && {
-      //       confidence: entry.confidence,
-      //     }),
-      //   })
-      // );
+      data.metadata
+        .filter((entry: any) => !entry.error)
+        .forEach((entry: any) => {
+          const key = `${entry.camera_id}-${entry.timestamp}`;
+          if (!uniqueEntries.has(key)) {
+            uniqueEntries.set(key, {
+              cctv_id: String(entry.camera_id),
+              location_name: entry.location,
+              coordinates: {
+                lat: entry.latlong[0],
+                lng: entry.latlong[1],
+              },
+              timestamp: new Date(entry.timestamp),
+              ...(entry.similarity_score !== undefined && {
+                confidence: entry.similarity_score,
+              }),
+            });
+          }
+        });
 
-      // setTargetFoundAt(response_target_found_at || example_target_found_at_1);
+      setTargetFoundAt(Array.from(uniqueEntries.values()));
 
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-      setTargetFoundAt(example_target_found_at_1);
+      // Reset UI
+      setTargetImage(null);
+      setSelectedFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     } catch (error) {
       console.error("Error uploading image:", error);
     }

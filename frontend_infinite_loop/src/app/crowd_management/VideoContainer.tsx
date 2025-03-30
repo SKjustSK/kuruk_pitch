@@ -1,15 +1,28 @@
+import { useState } from "react";
 import { ImageKitProvider, IKVideo } from "imagekitio-next";
+import { Loader2 } from "lucide-react";
 
-export default function VideoContainer({ imageKitFilePath }) {
+export default function VideoContainer({ videoURL }) {
+  const [loading, setLoading] = useState(false);
+
   return (
     <div className="flex items-center justify-center min-h-64 p-4">
-      {imageKitFilePath ? (
+      {videoURL ? (
         <ImageKitProvider urlEndpoint={process.env.NEXT_PUBLIC_URL_ENDPOINT}>
-          <IKVideo
-            path={imageKitFilePath}
-            className="max-h-[50vh] object-cover"
-            controls={true}
-          />
+          <div className="relative">
+            {loading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg">
+                <Loader2 className="w-10 h-10 animate-spin text-white" />
+              </div>
+            )}
+            <IKVideo
+              src={videoURL}
+              className="max-h-[50vh] object-cover"
+              controls={true}
+              onLoadStart={() => setLoading(true)}
+              onLoadedData={() => setLoading(false)}
+            />
+          </div>
         </ImageKitProvider>
       ) : (
         <div className="flex flex-col items-center justify-center p-8 text-gray-600 dark:text-gray-300">

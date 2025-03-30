@@ -4,40 +4,16 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import UploadVideoContainer from "./UploadVideoContainer";
 import VideoContainer from "./VideoContainer";
-
-const example_timelineData = [
-  {
-    second: 2,
-    max_people_found: 4,
-  },
-  {
-    second: 4,
-    max_people_found: 10,
-  },
-  {
-    second: 6,
-    max_people_found: 7,
-  },
-  {
-    second: 8,
-    max_people_found: 6,
-  },
-  {
-    second: 10,
-    max_people_found: 9,
-  },
-];
+import { Loader2 } from "lucide-react";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_COLLAB_PUBLIC_URL;
-const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT;
 
 export default function CrowdManagementPage() {
-  const [imageKitFilePath, setImageKitFilePath] = useState<string | null>(null);
-  const videoURL = imageKitFilePath ? `${urlEndpoint}${imageKitFilePath}` : "";
-
+  const [videoURL, setVideoURL] = useState<string | null>(null);
   const [timelineData, setTimelineData] = useState<
     { second: number; max_people_found: number }[]
   >([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const formatTime = (seconds: number) => {
     const min = Math.floor(seconds / 60);
@@ -46,23 +22,22 @@ export default function CrowdManagementPage() {
   };
 
   useEffect(() => {
-    console.log("Request sent:", videoURL);
-    if (!videoURL) return;
+    if (!videoURL?.trim()) return;
 
     const fetchTimelineData = async () => {
-      const requestBody = {
-        video_url: videoURL,
-        metadata: {},
-      };
+      console.log("Request sent to:", `${BACKEND_URL}/video-count-population`);
+      console.log("Request body:", { video_url: videoURL, metadata: {} });
+
+      setIsLoading(true);
 
       try {
         const response = await fetch(`${BACKEND_URL}/video-count-population`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestBody),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ video_url: videoURL, metadata: {} }),
         });
+
+        console.log("Response received:", response);
 
         if (!response.ok) {
           const errorText = await response.text();
@@ -70,10 +45,12 @@ export default function CrowdManagementPage() {
         }
 
         const data = await response.json();
-        console.log(data);
+        console.log("Data received:", data);
         setTimelineData(data.timeline_data);
       } catch (error) {
         console.error("Error fetching timeline data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -93,7 +70,7 @@ export default function CrowdManagementPage() {
               <h2 className="text-xl font-semibold mb-4 border-b-2 pb-2">
                 Live Video Feed
               </h2>
-              <VideoContainer imageKitFilePath={imageKitFilePath} />
+              <VideoContainer videoURL={videoURL} />
             </CardContent>
           </Card>
 
@@ -102,7 +79,7 @@ export default function CrowdManagementPage() {
               <h2 className="text-xl font-semibold mb-4 border-b-2 pb-2">
                 Upload CCTV Footage
               </h2>
-              <UploadVideoContainer setImageKitFilePath={setImageKitFilePath} />
+              <UploadVideoContainer setVideoURL={setVideoURL} />
             </CardContent>
           </Card>
         </div>
@@ -113,7 +90,11 @@ export default function CrowdManagementPage() {
               Crowd Analysis Timeline
             </h2>
             <div className="space-y-3 overflow-y-auto pr-2 flex-1 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
-              {timelineData.length > 0 ? (
+              {isLoading ? (
+                <div className="flex justify-center items-center h-40">
+                  <Loader2 className="h-8 w-8 text-gray-600 dark:text-gray-400 animate-spin" />
+                </div>
+              ) : timelineData.length > 0 ? (
                 timelineData.map((item, index) => (
                   <div
                     key={index}
@@ -128,7 +109,7 @@ export default function CrowdManagementPage() {
                   </div>
                 ))
               ) : (
-                <p className="text-gray-500 dark:text-gray-400">
+                <p className="text-gray-500 dark:text-gray-400 text-center">
                   No data available
                 </p>
               )}
