@@ -14,13 +14,14 @@ import {
 } from "@/components/ui/card";
 import { DemoCCTVFootage } from "@/types/interfaces";
 import { ImageKitProvider, IKUpload } from "imagekitio-next";
-import { Loader2 } from "lucide-react";
 
 const publicKey = process.env.NEXT_PUBLIC_PUBLIC_KEY;
 const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT;
 const BACKEND_URL = process.env.NEXT_PUBLIC_COLLAB_PUBLIC_URL;
 
 export default function VideoUploadForm() {
+  console.log("Backend url: ", BACKEND_URL);
+
   const [formData, setFormData] = useState<DemoCCTVFootage>({
     cctv_id: "",
     location_name: "",
@@ -29,7 +30,6 @@ export default function VideoUploadForm() {
     video_url: "",
   });
   const [loading, setLoading] = useState(false);
-  const [uploading, setUploading] = useState(false);
 
   const authenticator = useCallback(async () => {
     try {
@@ -45,12 +45,10 @@ export default function VideoUploadForm() {
   const handleUploadSuccess = useCallback((res: any) => {
     console.log("Upload success:", res);
     setFormData((prev) => ({ ...prev, video_url: res.url }));
-    setUploading(false);
   }, []);
 
   const handleUploadError = useCallback((err: any) => {
     console.error("Upload error:", err);
-    setUploading(false);
   }, []);
 
   const handleInputChange = useCallback(
@@ -80,6 +78,8 @@ export default function VideoUploadForm() {
     }
 
     setLoading(true);
+    console.log("Sending request to backend:", formData);
+    console.log("Backend url: ", BACKEND_URL);
 
     const requestBody = {
       CCTV_id: String(formData.cctv_id),
@@ -98,6 +98,8 @@ export default function VideoUploadForm() {
         body: JSON.stringify(requestBody),
       });
 
+      console.log("Request sent, waiting for response...");
+
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Upload failed: ${response.status} - ${errorText}`);
@@ -105,6 +107,7 @@ export default function VideoUploadForm() {
 
       const data = await response.json();
       console.log("Response received from backend:", data);
+
       window.location.reload();
     } catch (error) {
       console.error("Upload error:", error);
@@ -134,6 +137,44 @@ export default function VideoUploadForm() {
           </div>
 
           <div className="space-y-2">
+            <Label htmlFor="location_name">Location Name</Label>
+            <Input
+              id="location_name"
+              name="location_name"
+              placeholder="Enter location name"
+              value={formData.location_name}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="lat">Latitude</Label>
+              <Input
+                id="lat"
+                name="lat"
+                type="number"
+                step="any"
+                placeholder="Enter latitude"
+                value={formData.coordinates.lat || ""}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="lng">Longitude</Label>
+              <Input
+                id="lng"
+                name="lng"
+                type="number"
+                step="any"
+                placeholder="Enter longitude"
+                value={formData.coordinates.lng || ""}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="video">Upload Video</Label>
             <ImageKitProvider
               publicKey={publicKey}
@@ -144,10 +185,8 @@ export default function VideoUploadForm() {
                 className="bg-neutral-950 rounded-lg text-white px-4 py-2 text-sm"
                 onError={handleUploadError}
                 onSuccess={handleUploadSuccess}
-                onUploadStart={() => setUploading(true)}
               />
             </ImageKitProvider>
-            {uploading && <Loader2 className="w-5 h-5 animate-spin mt-2" />}
           </div>
 
           {formData.video_url && (
@@ -164,7 +203,7 @@ export default function VideoUploadForm() {
 
         <CardFooter>
           <Button type="submit" disabled={loading}>
-            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Submit"}
+            {loading ? "Submitting..." : "Submit"}
           </Button>
         </CardFooter>
       </form>
