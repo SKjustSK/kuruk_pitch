@@ -5,10 +5,34 @@ import { ImageKitProvider, IKUpload } from "imagekitio-next";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
-const publicKey = process.env.NEXT_PUBLIC_PUBLIC_KEY;
-const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT;
+const publicKey = process.env.NEXT_PUBLIC_PUBLIC_KEY!;
+const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT!;
 
-export default function UploadVideoContainer({ setVideoURL }) {
+type UploadVideoContainerProps = {
+  setVideoURL: (url: string) => void;
+};
+
+// ImageKit success and error response types (basic)
+type ImageKitUploadSuccess = {
+  fileId: string;
+  name: string;
+  url: string;
+  filePath: string;
+  size: number;
+  height?: number;
+  width?: number;
+  thumbnailUrl?: string;
+};
+
+type ImageKitUploadError = {
+  message?: string;
+  statusCode?: number;
+  response?: unknown;
+};
+
+export default function UploadVideoContainer({
+  setVideoURL,
+}: UploadVideoContainerProps) {
   const [loading, setLoading] = useState(false);
 
   const authenticator = async () => {
@@ -30,12 +54,12 @@ export default function UploadVideoContainer({ setVideoURL }) {
     }
   };
 
-  const onError = (err) => {
+  const onError = (err: ImageKitUploadError) => {
     console.error("Upload Error:", err);
     setLoading(false);
   };
 
-  const onSuccess = (res) => {
+  const onSuccess = (res: ImageKitUploadSuccess) => {
     console.log("Upload Success:", res);
     setVideoURL(`${urlEndpoint}${res.filePath}`);
     setLoading(false);

@@ -2,7 +2,11 @@ import { useState } from "react";
 import { ImageKitProvider, IKVideo } from "imagekitio-next";
 import { Loader2 } from "lucide-react";
 
-export default function VideoContainer({ videoURL }) {
+type VideoContainerProps = {
+  videoURL: string | null;
+};
+
+export default function VideoContainer({ videoURL }:VideoContainerProps) {
   const [loading, setLoading] = useState(false);
 
   return (

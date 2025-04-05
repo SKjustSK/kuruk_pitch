@@ -14,7 +14,7 @@ interface LocationCardProps extends TargetLocation {
 export default function LocationCard({
   location_name,
   cctv_id,
-  coordinates,
+  // coordinates,
   timestamp,
   confidence = 0,
   imageUrl,
@@ -26,8 +26,8 @@ export default function LocationCard({
     return () => clearTimeout(timer);
   }, [confidence]);
 
-  const formatTime = (timestamp: number) => {
-    const date = new Date(timestamp);
+  const formatTime = (timestamp: Date) => {
+    const date = timestamp;
     const now = new Date();
 
     const isToday = now.toDateString() === date.toDateString();

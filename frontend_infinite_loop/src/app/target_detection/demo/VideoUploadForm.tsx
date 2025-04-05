@@ -19,6 +19,15 @@ const publicKey = process.env.NEXT_PUBLIC_PUBLIC_KEY;
 const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT;
 const BACKEND_URL = process.env.NEXT_PUBLIC_COLLAB_PUBLIC_URL;
 
+type UploadResponse = {
+  url: string;
+};
+
+type UploadError = {
+  message?: string;
+  [key: string]: unknown;
+};
+
 export default function VideoUploadForm() {
   console.log("Backend url: ", BACKEND_URL);
 
@@ -42,12 +51,12 @@ export default function VideoUploadForm() {
     }
   }, []);
 
-  const handleUploadSuccess = useCallback((res: any) => {
+  const handleUploadSuccess = useCallback((res: UploadResponse) => {
     console.log("Upload success:", res);
     setFormData((prev) => ({ ...prev, video_url: res.url }));
   }, []);
 
-  const handleUploadError = useCallback((err: any) => {
+  const handleUploadError = useCallback((err: UploadError) => {
     console.error("Upload error:", err);
   }, []);
 

@@ -8,13 +8,30 @@ import {
   InfoWindow,
   useMap,
 } from "@vis.gl/react-google-maps";
-import { TargetLocation } from "@/types/interfaces";
 
+// Types
+type Coordinates = {
+  lat: number;
+  lng: number;
+};
+
+type TargetFoundAt = {
+  timestamp: number;
+  coordinates: Coordinates;
+  cctv_id: string;
+  location_name: string;
+};
+
+type TargetMapLocationProps = {
+  target_found_at: TargetFoundAt[];
+};
+
+// Marker size/color settings
 const MARKER_CHANGE_TIME_1 = 6 * 60 * 60 * 1000;
 const MARKER_CHANGE_TIME_2 = 24 * 60 * 60 * 1000;
 const MARKER_CHANGE_TIME_3 = 7 * 24 * 60 * 60 * 1000;
 
-const getMarkerSize = (timestamp) => {
+const getMarkerSize = (timestamp: number) => {
   const now = Date.now();
   const diff = now - timestamp;
 
@@ -24,7 +41,7 @@ const getMarkerSize = (timestamp) => {
   return 20;
 };
 
-const getMarkerColor = (timestamp) => {
+const getMarkerColor = (timestamp: number) => {
   const now = Date.now();
   const diff = now - timestamp;
 
@@ -37,11 +54,12 @@ const getMarkerColor = (timestamp) => {
   return { background: "#9E9E9E", border: "#616161" };
 };
 
-const TargetMarkers = React.memo(({ target_found_at }) => {
-  const [selectedMarker, setSelectedMarker] = useState(null);
+// Component: TargetMarkers
+const TargetMarkers = React.memo(({ target_found_at }: TargetMapLocationProps) => {
+  const [selectedMarker, setSelectedMarker] = useState<TargetFoundAt | null>(null);
 
   const sortedLocations = [...target_found_at].sort(
-    (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
+    (a, b) => a.timestamp - b.timestamp
   );
 
   return (
@@ -55,7 +73,7 @@ const TargetMarkers = React.memo(({ target_found_at }) => {
           <AdvancedMarker
             position={geolocation.coordinates}
             onClick={() => setSelectedMarker(geolocation)}
-            key={geolocation.cctv_id + geolocation.timestamp}
+            key={`${geolocation.cctv_id}-${geolocation.timestamp}`}
           >
             <div className="relative flex items-center justify-center">
               <div
@@ -110,7 +128,8 @@ const TargetMarkers = React.memo(({ target_found_at }) => {
   );
 });
 
-const FitMapToBounds = React.memo(({ target_found_at }) => {
+// Component: FitMapToBounds
+const FitMapToBounds = React.memo(({ target_found_at }: TargetMapLocationProps) => {
   const map = useMap();
 
   useEffect(() => {
@@ -125,7 +144,8 @@ const FitMapToBounds = React.memo(({ target_found_at }) => {
   return null;
 });
 
-export default function TargetMapLocation({ target_found_at }) {
+// Main Map Component
+export default function TargetMapLocation({ target_found_at }: TargetMapLocationProps) {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
   const mapId = process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID;
 
